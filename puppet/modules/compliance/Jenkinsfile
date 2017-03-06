@@ -1,0 +1,32 @@
+#!/usr/bin/env groovy
+
+slack_channel = '#uk-hsbc-slackbot'
+slack_team = 'contino'
+slack_token = 'jONZuZk3rKI9ZGkSXYJob1aq'
+
+tokens = "${env.JOB_NAME}".tokenize('/')
+org = tokens[0]
+repo = tokens[1]
+branch = tokens[2]
+
+echo '\u2600 account-org/repo/branch=' + org +'/'+ repo +'/'+ branch
+echo "\u2600 Jenkins job URL is: " + env.JOB_URL + "<--"
+echo "\u2600 Jenkins job build URL is: -->" + env.BUILD_URL + "<--"
+
+// Testing Module ----------------------------------------------------
+// TODO: make checks parallel as they don't depend on each other
+//
+stage '\u2776 Testing the module'
+node('docker')  {
+  env.PATH = "/home/jenkins/.rbenv/plugins/ruby-build/bin:/home/jenkins/.rbenv/shims:/home/jenkins/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/opt/puppetlabs/bin"
+  env.GEM_ROOT = "/home/jenkins/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0"
+  env.GEM_PATH = "/home/jenkins/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0:/home/jenkins/.gem/ruby/2.3.0"
+
+  echo "HELLO"
+  checkout scm
+  sh(script: "puppet-lint --no-autoloader_layout-check .", returnStdout: true)
+  sh(script: "puppet parser validate .", returnStdout: true)
+  //sh(script: "rspec-puppet", returnStdout: true)
+  sh(script: "rake spec", returnStdout: true)
+  input 'Click proceed to merge changes to master & release'
+}

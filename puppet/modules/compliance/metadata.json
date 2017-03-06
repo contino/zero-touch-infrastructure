@@ -1,0 +1,12 @@
+{
+  "name": "compliance",
+  "version": "0.0.1",
+  "author": "Jordan Taylor",
+  "summary": "Compliance demo.",
+  "license": "Apache-2.0",
+  "source": "",
+  "project_page": "",
+  "issues_url": "",
+  "dependencies": [],
+  "operatingsystem_support": []
+}

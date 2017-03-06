@@ -1,0 +1,16 @@
+require 'rake'
+require 'rspec/core/rake_task'
+
+desc "Run serverspec on current host"
+task :spec => 'serverspec:all'
+
+namespace :serverspec do
+  task :all do |t|
+    desc "Run serverspec to on current node"
+    RSpec::Core::RakeTask.new('spec') do |t|
+      t.pattern = 'spec/acceptance/*_spec.rb'
+    end
+  end
+end
+
+# serverspec, rspec, rake
