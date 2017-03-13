@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'apache' do
+describe 'compliance' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
@@ -8,23 +8,23 @@ describe 'apache' do
           facts
         end
 
-        context "apache class without any parameters" do
+        context "compliance class without any parameters" do
           it { is_expected.to compile.with_all_deps }
 
-          it { is_expected.to contain_class('apache::params') }
-          it { is_expected.to contain_class('apache::install').that_comes_before('apache::config') }
-          it { is_expected.to contain_class('apache::config') }
-          it { is_expected.to contain_class('apache::service').that_subscribes_to('apache::config') }
+          it { is_expected.to contain_class('compliance::params') }
+          it { is_expected.to contain_class('compliance::install').that_comes_before('compliance::config') }
+          it { is_expected.to contain_class('compliance::config') }
+          it { is_expected.to contain_class('compliance::service').that_subscribes_to('compliance::config') }
 
-          it { is_expected.to contain_service('apache') }
-          it { is_expected.to contain_package('apache').with_ensure('present') }
+          it { is_expected.to contain_service('compliance') }
+          it { is_expected.to contain_package('compliance').with_ensure('present') }
         end
       end
     end
   end
 
   context 'unsupported operating system' do
-    describe 'apache class without any parameters on Solaris/Nexenta' do
+    describe 'compliance class without any parameters on Solaris/Nexenta' do
       let(:facts) do
         {
           :osfamily        => 'Solaris',
@@ -32,7 +32,7 @@ describe 'apache' do
         }
       end
 
-      it { expect { is_expected.to contain_package('apache') }.to raise_error(Puppet::Error, /Nexenta not supported/) }
+      it { expect { is_expected.to contain_package('compliance') }.to raise_error(Puppet::Error, /Nexenta not supported/) }
     end
   end
 end
