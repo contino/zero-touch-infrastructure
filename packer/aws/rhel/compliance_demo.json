@@ -1,0 +1,35 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-1",
+      "source_ami": "ami-02ace471",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "compliance_demo_{{isotime \"2006/01/02_15h04m05s\"}}",
+      "ssh_pty" : true
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum install puppet -y",
+        "sudo gem install rspec serverspec rake"
+      ]
+    },
+    {
+      "type": "puppet-masterless",
+      "manifest_file": "../../../puppet/control/manifests/site.pp",
+      "module_paths": "../../../puppet/modules",
+      "hiera_config_path": "../../../puppet/control/hiera.yaml"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "cd /tmp/packer-puppet-masterless/module-0/compliance && /usr/local/bin/rake spec"
+      ]
+    }
+  ]
+}
