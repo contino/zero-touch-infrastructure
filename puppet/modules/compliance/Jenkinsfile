@@ -1,9 +1,5 @@
 #!/usr/bin/env groovy
 
-slack_channel = '#uk-hsbc-slackbot'
-slack_team = 'contino'
-slack_token = 'jONZuZk3rKI9ZGkSXYJob1aq'
-
 tokens = "${env.JOB_NAME}".tokenize('/')
 org = tokens[0]
 repo = tokens[1]
@@ -22,7 +18,6 @@ node('docker')  {
   env.GEM_ROOT = "/home/jenkins/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0"
   env.GEM_PATH = "/home/jenkins/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0:/home/jenkins/.gem/ruby/2.3.0"
 
-  echo "HELLO"
   checkout scm
   sh(script: "puppet-lint --no-autoloader_layout-check .", returnStdout: true)
   sh(script: "puppet parser validate .", returnStdout: true)
