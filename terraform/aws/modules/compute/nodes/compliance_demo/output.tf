@@ -2,4 +2,3 @@
 # security group(s) they are part of
 output "compliance_demo_instance_id" { value = ["${aws_instance.compliance-demo.*.id}"] }
 output "compliance_demo_ip"          { value = ["${aws_instance.compliance-demo.*.public_ip}"] }
-output "compliance_demo_sg_id"       { value = "${aws_security_group.demo-sg.id}" }

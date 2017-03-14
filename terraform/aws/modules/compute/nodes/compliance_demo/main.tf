@@ -7,41 +7,29 @@ resource "aws_instance" "compliance-demo" {
   instance_type          = "${var.instance_type}"
   count                  = "${var.count}"
   key_name               = "${var.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.demo-sg.id}"]
+  vpc_security_group_ids = ["${var.security_group_id}"]
   subnet_id              = "${var.subnet_id}"
+
+  connection {
+    user        = "ec2-user"
+	  private_key = "${file("${var.ssh_connection_keyfile_path}")}"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+    "puppet apply --modulepath=/tmp/packer-puppet-masterless/module-0 --hiera_config=/tmp/packer-puppet-masterless/hiera.yaml /tmp/packer-puppet-masterless/manifests/site.pp",
+    "cd /tmp/packer-puppet-masterless/module-0/compliance && /usr/local/bin/rake spec"
+    ]
+  }
 
   # metadata tagging
   tags {
-      Name  = "compliance-demo-${count.index}"
-      Owner = "${var.owner}"
+      Name           = "compliance-demo-${count.index}"
+      Owner          = "${var.owner}"
+      Billing_Domain = "${var.billing_domain}"
   }
-}
 
-# creates a security group in AWS
-resource "aws_security_group" "demo-sg" {
-	name        = "demo-sg"
-	description = "Allow SSH traffic incoming, allow all outgoing traffic"
-  vpc_id      = "${var.vpc_id}"
-
-  # allow SSH connectivity
-	ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
-	}
-
-  # allow all outgoing traffic
-	egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-	}
-
-  # metadata tagging
-	tags {
-      Name       = "demo_sg"
-      Owner      = "${var.owner}"
+  lifecycle {
+    create_before_destroy = true
   }
 }
