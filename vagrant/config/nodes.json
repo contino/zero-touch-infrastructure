@@ -2,7 +2,7 @@
   "nodes": {
     "compliance": {
       ":provisioner": "masterless",
-      ":base": "puppetlabs/centos-7.2-64-puppet",
+      ":base": "jordzn/centos-7-3-puppet",
       ":ip": "dhcp",
       ":role": "test",
       ":memory": 1024,
