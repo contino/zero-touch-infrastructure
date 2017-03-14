@@ -1,18 +1,13 @@
 # Provided to support running Puppet Masterless only
 ---
-:backends:
-  - yaml
+version: 5
+hierarchy:
+  - name: nodes
+    path: "nodes/%{trusted.certname}.yaml"
 
-:logger: console
+  - name: common
+    path: "common.yaml"
 
-:hierarchy:
-  - client/%{::client}/node/%{::fqdn}
-  - client/%{::client}/location/%{::location}/%{::puppet_role}
-  - client/%{::client}/location/%{::location}/%{module_name}
-  - client/%{::client}/location/%{::location}
-  - role/%{::puppet_role}
-  - module/%{module_name}
-  - common
-
-:yaml:
-  :datadir: ./hieradata
+defaults:
+  data_hash: yaml_data
+  datadir: hieradata
