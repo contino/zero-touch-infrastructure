@@ -1,9 +1,9 @@
-# General Variables #
-#ami            = "" # uncomment this variable and provide the ID of the AMI created by Packer
+# Global Variables
 #owner          = "" # uncomment this variable and provide an identifying value for tagging
 #billing_domain = "" # uncomment this variable and provide an billing related identifying value for tagging
 
 # Node Variables
+ami                         = "" # uncomment this variable and provide the ID of the AMI created by Packer
 instance_type               = "t2.micro"
 instance_count              = "1"
 #ssh_key_name                = "" # uncomment this variable and provide an AWS keypair name
