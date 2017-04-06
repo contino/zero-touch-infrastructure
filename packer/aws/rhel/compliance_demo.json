@@ -6,11 +6,16 @@
       "source_ami": "ami-02ace471",
       "instance_type": "t2.micro",
       "ssh_username": "ec2-user",
-      "ami_name": "compliance_demo_{{isotime \"2006/01/02_15h04m05s\"}}",
-      "ssh_pty" : true
+      "ami_name": "contino_compliance_demo_rhel7_{{ timestamp }}",
+      "ssh_pty" : true,
+
+      "tags": {
+        "App": "App Name",
+        "Owner": "Owner Name",
+        "Creation Date": "{{isotime \"2006/01/02_15h04m05s\"}}"
+      }
     }
   ],
-
   "provisioners": [
     {
       "type": "shell",
